@@ -1,5 +1,6 @@
 use std::env;
 use std::io::{self, Write};
+use chrono::{Datelike, Local};
 
 fn main() {
     // 从命令行参数获取十进制数字
@@ -25,12 +26,19 @@ fn main() {
     // 将十六进制字符串重新排列
     let rearranged_hex = rearrange_hex(&hex_string);
     println!("重新排列后的十六进制: {}", rearranged_hex);
+    
+    let today = Local::now();
+    let year = today.year() % 100; // 获取年份的最后两位
 
-    let uid_str = rearranged_hex;
+    // ISO 周数
+    let week = today.iso_week().week();
+
+    let uid_str = rearranged_hex.clone();
     match calculate_bcc(&uid_str) {
-        Some(bcc) => println!("UID为{}的BCC值为{:X}", uid_str, bcc),
+        Some(bcc) => println!("UID为{}的BCC值为{:X}\n扇区0区块0数据应为: {}{:X}0804004279204F4753{}{}", uid_str, bcc, rearranged_hex, bcc, week, year),
         None => println!("无法计算BCC值，请提供有效的UID字符串"),
     }
+    
 }
 
 // 函数：根据给定的重新排列规则
