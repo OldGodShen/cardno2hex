@@ -31,7 +31,7 @@ fn main() {
     let year = today.year() % 100; // 获取年份的最后两位
 
     // ISO 周数
-    let week = today.iso_week().week();
+    let week = format!("{:02}", today.iso_week().week());
 
     let uid_str = rearranged_hex.clone();
     match calculate_bcc(&uid_str) {
